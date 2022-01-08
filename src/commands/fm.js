@@ -4,9 +4,9 @@ const { MessageEmbed } = require("discord.js");
 async function np(interaction) {
     let username;
     if (!interaction.options.getString("username")) {
-        const data = await interaction.client.db.query("SELECT * FROM users WHERE id = $1", [BigInt(interaction.member.id)]);
+        const data = await interaction.client.db.query("SELECT * FROM users WHERE id = $1", [BigInt(interaction.user.id)]);
         if (!data.rows[0] || !data.rows[0].lastfm) {
-            return await interaction.reply("You must provide a Last.FM username or set your username with `/fm set <username>`");
+            return await interaction.reply("You must provide a Last.FM username or set your username with `/fm set <username>`.");
         }
         username = data.rows[0].lastfm;
     } else {
@@ -29,7 +29,7 @@ async function np(interaction) {
 
     const embed = new MessageEmbed()
         .setTitle(`${mostRecentTrack["recenttracks"]["track"][0]["artist"]["#text"]} - ${mostRecentTrack["recenttracks"]["track"][0]["name"]}`)
-        .setAuthor({ name: interaction.member.user.username, url: `https://last.fm/user/${username}`, iconURL: interaction.member.displayAvatarURL({ dynamic: true }) })
+        .setAuthor({ name: interaction.user.username, url: `https://last.fm/user/${username}`, iconURL: interaction.user.avatarURL({ dynamic: true }) })
         .setThumbnail(mostRecentTrack["recenttracks"]["track"][0]["image"].slice("-1")[0]["#text"])
         .setDescription(`${trackInfo["track"]["userplaycount"]} plays`);
     await interaction.reply({ embeds: [embed] });
@@ -43,13 +43,22 @@ async function set(interaction) {
         console.log(e);
         return await interaction.reply(`Last.FM user \`${username}\` does not exist.`);
     }
-    await interaction.client.db.query("INSERT INTO users(id, lastfm) VALUES($1, $2) ON CONFLICT (id) DO UPDATE SET lastfm = $2", [BigInt(interaction.member.id), username]);
-    await interaction.reply(`Set your Last.FM username to \`${username}\``);
+    await interaction.client.db.query("INSERT INTO users(id, lastfm) VALUES($1, $2) ON CONFLICT (id) DO UPDATE SET lastfm = $2", [BigInt(interaction.user.id), username]);
+    await interaction.reply(`Set your Last.FM username to \`${username}\`.`);
+}
+
+async function unset(interaction) {
+    await interaction.client.db.query("UPDATE users SET lastfm = NULL WHERE id = $1", [BigInt(interaction.user.id)]);
+    await interaction.reply("Reset your Last.FM username.");
 }
 
 const subcommands = new Map();
 subcommands.set("np", np);
+console.log("[src/commands/fm.js] [SUBCOMMANDS] Subcommand /fm np loaded.");
 subcommands.set("set", set);
+console.log("[src/commands/fm.js] [SUBCOMMANDS] Subcommand /fm set loaded.");
+subcommands.set("unset", unset);
+console.log("[src/commands/fm.js] [SUBCOMMANDS] Subcommand /fm unset loaded.");
 
 module.exports = {
     enabled: true,
@@ -67,12 +76,16 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName("set")
-                .setDescription("Save your Last.FM username to Yarn")
+                .setDescription("Set your Last.FM username")
                 .addStringOption(option =>
                     option
                         .setName("username")
                         .setDescription("Username to save")
-                        .setRequired(true))),
+                        .setRequired(true)))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName("unset")
+                .setDescription("Reset your Last.FM username")),
     async execute(interaction) {
         const subcommand = subcommands.get(interaction.options.getSubcommand());
         if (!subcommand) return;
