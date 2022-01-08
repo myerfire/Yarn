@@ -41,7 +41,7 @@ async function set(interaction) {
         await interaction.client.lastfm.userGetInfo({ user: username });
     } catch (e) {
         console.log(e);
-        return await interaction.reply(`Last.FM user \`${username}\` does not exist.`);
+        return await interaction.reply({ content: `Last.FM user \`${username}\` does not exist.`, ephemeral: true });
     }
     await interaction.client.db.query("INSERT INTO users(id, lastfm) VALUES($1, $2) ON CONFLICT (id) DO UPDATE SET lastfm = $2", [BigInt(interaction.user.id), username]);
     await interaction.reply(`Set your Last.FM username to \`${username}\`.`);
