@@ -109,3 +109,6 @@ config.json
 # Deploy commands scripts
 deploy-commands-dev.js
 deploy-commands-production.js
+
+# PM2 file
+yarn.json
