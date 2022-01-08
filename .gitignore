@@ -105,3 +105,6 @@ dist
 
 # Config file
 config.json
+
+# Deploy commands script
+deploy-commands.js
