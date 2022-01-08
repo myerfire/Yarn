@@ -2,7 +2,7 @@
   "name": "yarn",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,6 +22,7 @@
     "discord-api-types": "^0.26.1",
     "discord.js": "^13.5.1",
     "install": "^0.13.0",
+    "lastfm-node-client": "^2.2.0",
     "npm": "^8.3.0",
     "pg": "^8.7.1"
   },
