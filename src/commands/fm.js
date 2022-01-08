@@ -30,7 +30,7 @@ async function np(interaction) {
     const embed = new MessageEmbed()
         .setTitle(`${mostRecentTrack["recenttracks"]["track"][0]["artist"]["#text"]} - ${mostRecentTrack["recenttracks"]["track"][0]["name"]}`)
         .setAuthor({ name: interaction.user.username, url: `https://last.fm/user/${username}`, iconURL: interaction.user.avatarURL({ dynamic: true }) })
-        .setThumbnail(mostRecentTrack["recenttracks"]["track"][0]["image"].slice("-1")[0]["#text"])
+        .setThumbnail(mostRecentTrack["recenttracks"]["track"][0]["image"].at("-1")["#text"])
         .setDescription(`${trackInfo["track"]["userplaycount"]} plays`);
     await interaction.reply({ embeds: [embed] });
 }
