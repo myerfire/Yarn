@@ -1,0 +1,26 @@
+{
+  "name": "yarn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myerfire/Yarn.git"
+  },
+  "author": "Myer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/myerfire/Yarn/issues"
+  },
+  "homepage": "https://github.com/myerfire/Yarn#readme",
+  "dependencies": {
+    "discord.js": "^13.5.1",
+    "pg": "^8.7.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.6.0"
+  }
+}
