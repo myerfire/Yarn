@@ -23,6 +23,7 @@
     "discord.js": "^13.5.1",
     "install": "^0.13.0",
     "lastfm-node-client": "^2.2.0",
+    "moment": "^2.29.1",
     "npm": "^8.3.0",
     "pg": "^8.7.1"
   },
