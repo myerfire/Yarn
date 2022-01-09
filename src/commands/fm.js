@@ -17,21 +17,21 @@ async function np(interaction) {
     let trackInfo;
     try {
         mostRecentTrack = await interaction.client.lastfm.userGetRecentTracks({ username: username, limit: 1 });
-        trackInfo = await interaction.client.lastfm.trackGetInfo({ track: mostRecentTrack["recenttracks"]["track"][0]["name"], artist: mostRecentTrack["recenttracks"]["track"][0]["artist"]["#text"], username: username });
+        trackInfo = await interaction.client.lastfm.trackGetInfo({ track: mostRecentTrack.recenttracks.track[0].name, artist: mostRecentTrack.recenttracks.track[0].artist["#text"], username: username });
     } catch {
         return await interaction.reply(`Last.FM user \`${username}\`does not exist.`);
     }
     /* if the track doesn't have @attr, it is not being played
     you must accept this fact. this is lastfm. nothing makes sense. */
-    if (!("@attr" in mostRecentTrack["recenttracks"]["track"][0])) {
+    if (!("@attr" in mostRecentTrack.recenttracks.track[0])) {
         return await interaction.reply("No song currently being played!");
     }
 
     const embed = new MessageEmbed()
-        .setTitle(`${mostRecentTrack["recenttracks"]["track"][0]["artist"]["#text"]} - ${mostRecentTrack["recenttracks"]["track"][0]["name"]}`)
+        .setTitle(`${mostRecentTrack.recenttracks.track[0].artist["#text"]} - ${mostRecentTrack.recenttracks.track[0].name}`)
         .setAuthor({ name: interaction.user.username, url: `https://last.fm/user/${username}`, iconURL: interaction.user.avatarURL({ dynamic: true }) })
-        .setThumbnail(mostRecentTrack["recenttracks"]["track"][0]["image"].at("-1")["#text"])
-        .setDescription(`${trackInfo["track"]["userplaycount"]} plays`);
+        .setThumbnail(mostRecentTrack.recenttracks.track[0].image.at(-1)["#text"])
+        .setDescription(`${trackInfo.track.userplaycount} plays`);
     await interaction.reply({ embeds: [embed] });
 }
 
