@@ -103,6 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
+# eslint config file
+.eslintrc.json
+
 # Config file
 config.json
 

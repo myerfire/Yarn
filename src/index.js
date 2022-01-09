@@ -12,7 +12,8 @@ const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith("
 console.log("[index.js] [COMMANDS] Loading commands..");
 for (const commandFile of commandFiles) {
     const command = require(`./commands/${commandFile}`);
-    if (!command.enabled) continue;
+    if (command.disabled) continue;
+    if (command.isGroup) command.init(command); // handle subcommand initialization in command file
     client.commands.set(command.data.name, command);
     console.log(`[index.js] [COMMANDS] Command /${command.data.name} loaded.`);
 }

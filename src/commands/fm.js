@@ -52,16 +52,19 @@ async function unset(interaction) {
     await interaction.reply("Reset your Last.FM username.");
 }
 
-const subcommands = new Map();
-subcommands.set("np", np);
-console.log("[src/commands/fm.js] [SUBCOMMANDS] Subcommand /fm np loaded.");
-subcommands.set("set", set);
-console.log("[src/commands/fm.js] [SUBCOMMANDS] Subcommand /fm set loaded.");
-subcommands.set("unset", unset);
-console.log("[src/commands/fm.js] [SUBCOMMANDS] Subcommand /fm unset loaded.");
+function init(commandGroup) {
+    commandGroup.subcommands.set("np", np);
+    console.log("[src/commands/fm.js] [SUBCOMMANDS] Subcommand /fm np loaded.");
+    commandGroup.subcommands.set("set", set);
+    console.log("[src/commands/fm.js] [SUBCOMMANDS] Subcommand /fm set loaded.");
+    commandGroup.subcommands.set("unset", unset);
+    console.log("[src/commands/fm.js] [SUBCOMMANDS] Subcommand /fm unset loaded.");
+}
 
 module.exports = {
-    enabled: true,
+    isGroup: true,
+    subcommands: new Map(),
+    init: init,
     data: new SlashCommandBuilder()
         .setName("fm")
         .setDescription("Last.FM API commands")
@@ -87,7 +90,7 @@ module.exports = {
                 .setName("unset")
                 .setDescription("Reset your Last.FM username")),
     async execute(interaction) {
-        const subcommand = subcommands.get(interaction.options.getSubcommand());
+        const subcommand = this.subcommands.get(interaction.options.getSubcommand());
         if (!subcommand) return;
         await subcommand(interaction);
     },
